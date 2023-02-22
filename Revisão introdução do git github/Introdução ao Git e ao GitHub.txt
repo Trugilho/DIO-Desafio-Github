@@ -1,0 +1,328 @@
+Introdução ao Git e ao GitHub
+
+Entendendo o que é Git e sua importância:
+O Git é um sistema de versionamento(controle de versões) de código distribuido, criado por Linus Torvalds em 2005.
+Git é um sistema de controle de versão distribuído gratuito e de código aberto projetado para lidar com tudo, desde projetos pequenos a muito grandes.
+
+O GitHub é um repositório on-line onde podemos armazenar nosso código.
+
+Benefícios do uso do Git e do GitHub:
+- Controle de versão
+- Armazenamento em nuvem
+- Trabalho em equipe
+- Melhoria de seu código
+- Reconhecimento
+
+Navegação via Command line interface(CLI) e instalação do Git.
+A interação com o Git é feita primeiramente por comandos em linha(CLI), hoje já existem ferramentas para interagir com o Git via interface gráfica(GUI).
+Comandos básicos para um bom desempenho no terminal:
+Os comandos para Windows e Unix são diferentes
+- Mudar de pastas - W e U cd - cd / (vai para raiz), cd pasta(vai para pasta especificada), cd .. volta uma pasta, W cls U clear ou ctrl+L(limpa a tela), W cd <tab>(autocompleta com nome de pastas ou arquivos).
+- Listar as pastas - W dir e U ls
+
+- Criar pastas/arquivos - W e U mkdir mkdir workspace(Cria um diretório workspace), W e U posso criar um arquivo com o comando echo > nomearq.txt
+
+- Deletar pastas/arquivos - W del/rmdir e U rm -rf, para o W o comando del só deleta arquivos, W o comando rmdir remove repositório com todos os arquivos que tiver dentro dele. 
+W rmdir workspace /s /q remove o diretório workspace.
+U rm -rf workspace/ remove o diretório workspace.
+
+These are common Git commands used in various situations:
+
+start a working area (see also: git help tutorial)
+   clone     Clone a repository into a new directory
+   init      Create an empty Git repository or reinitialize an existing one
+
+work on the current change (see also: git help everyday)
+   add       Add file contents to the index
+   mv        Move or rename a file, a directory, or a symlink
+   restore   Restore working tree files
+   rm        Remove files from the working tree and from the index
+
+examine the history and state (see also: git help revisions)
+   bisect    Use binary search to find the commit that introduced a bug
+   diff      Show changes between commits, commit and working tree, etc
+   grep      Print lines matching a pattern
+   log       Show commit logs
+   show      Show various types of objects
+   status    Show the working tree status
+
+grow, mark and tweak your common history
+   branch    List, create, or delete branches
+   commit    Record changes to the repository
+   merge     Join two or more development histories together
+   rebase    Reapply commits on top of another base tip
+   reset     Reset current HEAD to the specified state
+   switch    Switch branches
+   tag       Create, list, delete or verify a tag object signed with GPG
+
+collaborate (see also: git help workflows)
+   fetch     Download objects and refs from another repository
+   pull      Fetch from and integrate with another repository or a local branch
+   push      Update remote refs along with associated objects
+
+'git help -a' and 'git help -g' list available subcommands and some
+concept guides. See 'git help <command>' or 'git help <concept>'
+to read about a specific subcommand or concept.
+See 'git help git' for an overview of the system.
+
+Entendendo como o Git funciona:
+- SHA1 - É um algorítimo de encriptação que gera um conjunto de caracteres identificador de 40 dígitos, que é uma forma rápida e segura de identificar um arquivo para um mesmo arquivo e seu conjunto de caracteres é gerado sempre a mesma chave, ou seja, a chave se altera toda ve que o conteúdo do arquivo é alterado, quando qualquer caractere é alterado.
+
+No terminal windows: openssl sha1 texto.txt, retorna:
+
+SHA1(texto.txt)= 2a832af007218c0d25e1f92108ec2b29f47588c4
+
+- Objetos fundamentais - Os tres tipos fundamentais de objetos do Git são:
+- Blobs - Neste objeto os arquivos são guardados, nos arquivos guardados neste objeto constam o tipo do obj, o tamanho, \0 e o conteúdo deste arquivo e metadados.
+O comando: echo 'conteudo' | git hash-object --stdin(este stdin indica para o Git que estou enviando uma string ao invés de um arquivo de texto para ser feito o SHA1), retorna:
+fc31e91b26cf85a55e072476de7f263c89260eb1
+Se uso o comando:echo -e 'conteudo'  openssl sha1, retorna:
+65b0d0dda479cc03cce59528e28961e498155f5c
+esta chave é diferente da gerada usando o Git obj, se usarmos o comando abaixo a chave gerada será igual a gerada no Git obj:
+echo -e 'blob 9\0conteudo' | openssl sha1, o resultado será:
+fc31e91b26cf85a55e072476de7f263c89260eb1
+
+- Trees - Neste objeto são armazenados os Blobs, apontando para tipos diferentes de Blobs, nas Trees também é guardado o nome do arquivo, responsavel por montar toda estrutura onde estão os arquivos, nas trees tmbém tem um sha1 só das trees. Se o arquivo da Blob for alterado, mudando a chave sha1, nas trees também mudará a sha1 das trees.
+
+
+- Commits - É o objeto mais importante, junta tudo, aponta para uma Tree, para o último Commit realizado(parente), para um Autor e para uma Mensagem, o Autor e a Mensagem(redigida pelo Autor explicando a que se refere os arquivos) fazem parte do significado deste arquivo. Também possuem sha1 que se altera conforme o blob for alterado. O Commit tem timestamp
+
+- Sistema distribuído - Os dados podem ser recuperados pelas versões disponíveis em cada máquina dos contribuintes ao código.
+
+- Segurança - Devido à facilidade de recuperação dos códigos pelo formato distribuido, isto gera grande segurança para os códigos versionados via Git.
+
+=======================================
+Dúvida Geração Tech Unimed Modulo I Principios de Desenvolvimento de Software (enviada em 29/05/2022 dom 11:50hs).
+Bom dia, em relação aos objetos fundamentasis do Git(aula Introdução ao Git e ao GitHub), entendi que se forem alterados/versionados os arquivos do software via Git, os Blobs, as Trees e/ou os Commits, todas as sha1 se alteram, gostaria de saber: A estrutura do Git é montada dentro do computador, os diretórios do Git não podem ser alterados pelo adm do computador(incluindo ou deletando aquivos, alterando diretórios, etc)? Se os diretórios forem alterados fora do Git, também haverá alterações nos sha1 ou esta ação irá gerar inconsistência no Git?
+
+Respondido: Em 29/05/2022 16:50hs
+quando vc cria um repositório local git, ela cria a pasta .git, que conterá todos os controles do seu projeto, heads, branchs, alterações, etc.
+
+Sempre que há mudanças, vc deve adicioná-las (git add) passando-os para o estado "stage", se você deletar arquivos do projeto, ou qquer outra alteração, ao executar o comando add (fica status stage), ao realizar o commit, então gera o sha1 e insere no controle do commit, todas as alterações que foram adicionadas.
+
+Agora a parte que eu não entendi, você diz alterar arquivos dentro da pasta .git ou na pasta do projeto?
+
+Se for do projeto, não tem problema, basta dar add, comitar, fazer o push e tudo está certo, nova chave, etc.
+
+Agora se alterar dentro da pasta .git, provavelmente danificará o controle e não haverá possibilidade de recuperar, mas, se o projeto estiver correto no repositório remoto, basta vc apagar o projeto e clonar o repositório remoto armazenado.
+
+Desculpe se falei besteira, git é muito extenso, tem muitos formas de recuperar, verificar as diferenças, mesclar, etc.
+===========================================
+
+Chaves SSH e Tokens: 
+Chave SSH: Forma de se estabelecer conexão segura e encriptada entre duas máquinas, configurando a nossa máquina no servidor do GitHub, o repositório irá reconhecer nosso equipamento quando formos enviar o código para o GitHub.
+Comandos para criar chaves SSH dentro do GitBash:
+ssh-keygen -t ed25519 -c rtrugilho@gmail.com <enter> pede uma senha e gera a chave.
+Retorna o lugar onde a chave será gerada e a chave gerada.
+vamos ao diretório especificado e damos o comando seguinte para saber a chave gerada a ser usada no GitHub:
+cat id_ed25519.pub(nome do arquivo da chave, o pub(lico), gerado na criação da chave acima), a chave irá ser apresentada na tela, copio com tudo, inclusive o e-maio e vou colar no GitHub no SSH keys / Add new, ponho um título(minha maquina windows e colo a chave copiada no campo key) e clico em ADD SSH Key.
+Agora retorno para pasta .ssh do Gitbash, tenho que inicializar o ssh agent na minha máquina dando o comando:
+eval $(ssh-agent -s), retorna: Agent pid 1382, inicializa o processo agent, em seguida dou o comando:
+ssh-add id_ed25519(nome do arquivo da chave, o privado(não o .pub), gerado na criação da chave)<enter>
+Retorna: Enter passphrase for id_25519: Digito a senha que foi criada anteriormente para minha chave, o agente irá utilizar o arquivo não publico para descriptografar a chave que receber. Retorna: Identity added: id_ed25519 (rtrugilho@gmail.com).
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINsUQi2sZWleH2+lw9r7xcwgo9F3RL1If/PUqjogPon5 rtrug@LAPTOP-L93BEMJP
+
+Tokens: Tokens de acesso pessoal, se assemelha ao processo de digitar nic name, requer senha, gero o token, guardo na minha máquina, na hora do uso informo o arquivo baixado(token), é melhor a chave ssh.
+
+Comandos utilizando o Git:
+- Iniciar um repositório Git - Criando um repositório: git init. Usando a pasta workspace do c:. inicializo o git-bash. ls
+cd workspace
+mkdir livro-receitas(crio o repositório livro-receitas)
+cd livro-receitas
+git init <enter> retorna a informação: Initialized empty Git repository in c:/workspace/livro-receitas/.git/
+se for dado o comando ls a pasta git não aparede, é uma pasta oculta para gerenciar o git. Para ver a pasta uso: ls -a
+./ ../ .git/
+cd . git/ mostra a estrutura da pasta git
+ls <enter> irá retornar o conteúdo do diretório .git:
+config  description HEAD hooks/ info/ objects/ refs/ 
+
+agora volto para pasta receitas:
+cd ..
+agora estarei no diretório  /c/workspace/livro-receitas (master)
+Agora crio um arquivo, na primeira vez tenho que fazer uma configuração inicial:
+git config --global user.email "rtrugilho@gmail.com"<enter>
+git config --global user.name trugilho<enter>
+Agora crio o arquivo markdown(forma mais humana de escrever um arquivo html): É uma forma diferente de escrever os h1, h2, h3, h4, h5 e h6:
+h1: # Título nível 1, h2: ## Título nível 2, h3: ### Título nível 3 ... # é a notação no markdown para <h1></h1>...
+No Explorador de arquivos(gerenciador do windows crio dentro da pasta .git um novo arquivo com o nome livro-receitas.md), abro o arquivo no editor de texto e digito o código, no editor de texto TYPRA(editor de testo para arquivos markdown) em ajuda, na opção Markdown reference temos todos os formatos a serem usados no teto com markdown. Após digitar, salvo o arquivo, volto ao terminal Git-bash e vou commitar o arquivo:
+
+- Iniciar o versionamento - git add (move arquivos)
+git add *
+
+- Criar um commit - git commit
+git commit -m "commit inicial"(mensagem de texto com informações do arquivo) retorna:
+[master (root-commit) 94958ac(parte dos caracteres de id)] commit inicial 1 file changed, xx inertions(+)
+create mode 100644 livro-receitas.md
+
+Ciclo de vida dos arquivos no Git:
+ls
+cd workspace
+mkdir receitas(para criar um diretório receitas dentro de workspace)
+mv livro-receitas.md ./receitas (movo o arquivo para o diretório receitas criado).
+à partir do diretório receitas, digito o comando git status para ver o status do arquivo livro-receitas.md
+
+Neste ponto o git identifica que foi criado um diretório novo chamado receita e um arquivo novo chamado livro-receitas e sugere que façamos commit para registrar tanto o diretório quanto o arquivo no git.
+então digito:
+git add livro-receitas.md receitas/ <enter>, agora o git já reconhece o diretório e o arquivo, digitando:
+git status já aparecem
+digito:
+git commit -m "cria pasta receitas, move arquivo para receitas"
+agora no git status o git não mais indica diretório ou arquivo novo.
+
+O arquivo Readme.md é gerado no github no formado md, podemos consultar mais informações, sintaxe básica e caracteristicas dos arquivos md em:
+readme.md:
+# dio-desafio-github
+# Repositório do desfio de projeto sobre github com gitbash
+## Links Úteis:
+## [Sintaxe Básica Markdown](https://www.markdownguide.org/)
+
+
+Trabalhando com o GitHub:
+
+
+no git bash:
+git config --list
+vai trazer a lista de todas as configurações que estão no seu git.
+Para alterar as configurações:
+git config --global --unset user.email (apaga a configuração do e-mail no git)
+git config --global name "Trugilho"
+
+crio um repositório no GitHub, abrindo o GitHub e clicando em repositório new dou um nome para o repositório, preencho a descrição, marco como público para ser visto por todos inicializo adicionando o Readme (Página inicial do nosso repositório com informações, considerações iniciais, links úteis, o que representa aquele repositório para nós), Gitgnore(Informações que queremos que seja ignoradas, coisas que não são essenciais para o versionamento, arquivos que serão gerados novamente a cada compilação), licenças sobre o software que estamos codificando e copio a URL que aparece no quick setup: git remote...
+https... esta URL copiada eu vou colar no git bash, no git bash dou o comando:
+Primeiro crio a pasta no diretório git de minha máquina ex:
+C:\ProjetosWEB\Git\DIO, dentro do diretório(DIO) clico com o botõ direito do mouse e clico em Git Bash Here, abrindo a janela do GitBash.
+nesta janela dou o comando git clone e colo(paste) o endereço html copiado do github:
+git clone https://github.com/Trugilho/dio-desafio-github.git e<enter>
+
+
+adiciono a origem:
+git remote add origin https... <enter>
+git remote -v aparecerão as listas que tenho cadastradas.
+git status para verificar se existe alguma pendência
+
+git push origin master para enviar o conteúdo do git da máquina para o GitHub, forneço as senhas...<enter>
+
+o git irá enviar o repositório local para o GitHub
+voltando para o gitHub e recarregando a página irá aparecer nossos códigos no GitHub.
+
+Quando tento enviar um arquivo(git push origin master) que já sofreu alterações por outro usuário e foi gerada uma versão mais atualizada deste arquivo no GitHub, em relação à que tenho na minha máquina, antes de realizar a alteração do arquivo e envio para o GitHub será necessário baixar o arquivo mais atual que está no repositório GitHub para minha máquina(git pull origin master), fazer a alteração que estava prevista:
+git add * adiciono o arquivo para área de stage
+git commit -m "resolve conflitos" marco que agora o arquivo é o mais atual e escrevo msg informando a alteração
+depois envio o arquivo novamente para o GitHub(git push origin master):
+git push origin master
+Agora o GitHub irá aceitar o arquivo alterado.
+
+Criando seu primeiro repositório no GitHub para compartilhar seu progresso
+DESCRIÇÃO
+Reforce seu conhecimento em Git com um desafio de projeto totalmente prático, onde você executará todos os passos para a criação, atualização e sincronização de um repositório no GitHub. Para isso, tenha em mente todas as dicas e direcionamentos apresentados pelo expert nas aulas. Dessa forma, você poderá compartilhar suas anotações e exercícios em seu próprio repositório. Criando assim, o primeiro (de muitos) projetos do seu portfólio ;-)
+
+Desafio:
+Agora é a sua hora de brilhar, use todo seu conhecimento em Git e GitHub para criar seu próprio repositório. Com isso, breve você terá muitos outros projetos no seu perfil no GitHub.
+Desta forma outros DEVs ou empresas poderão acessar seu portifólio de projetos e colaborar/acompanhar sua evolução profissional.
+
+======================================
+Na prática:
+Tentei pelo caminho indicado pelo José Oliveira, não funcionou...
+
+A atitude radical funcionou, 
+
+Primeiro delete o diretório do projeto do diretório git.
+2 - Em seguida dê o comando git init:
+Retornou:
+Reinitialized existing Git repository in C:/ProjetosWEB/Git/.git/
+
+3 - Dê o comando git add:
+Retornou:
+Nothing specified, nothing added.
+hint: Maybe you wanted to say 'git add .'?
+hint: Turn this message off by running
+hint: "git config advice.addEmptyPathspec false"
+
+4 - Crie um repositório no GitHub com o mesmo nome do diretório a ser incluido no Git.
+
+5 - Crie novamente o diretório do projeto no diretório git:
+Em seguida dê o comando:
+git add DIO-Desafio-Instagram
+Retornou:
+error: 'DIO-Desafio-Instagram/' does not have a commit checked out
+fatal: adding files failed
+
+6 - Altere para o diretório DIO...:
+cd DIO-Desafio-Instagram
+Efetuei o comando Commit:
+git commit -m DIO-Desafio-Instagram
+Retornou:
+[main (root-commit) aa501ae] DIO-Desafio-Instagram
+ 1 file changed, 1 insertion(+)
+ create mode 160000 DIO-Desafio-Instagram
+
+KKKKK, Parece que agora vai!!!!
+
+7 - Efetue o comando git status:
+git status
+Retornou:
+On branch main
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        "Bootcamp Gera\303\247\303\243o Tech Unimed BH/"
+        Dio-Desafio-GitHub-Primeiro-Repositorio/
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+8 - Efetue o comando abaixo:
+git remote add origin https://github.com/Trugilho/DIO-Desafio-Instagram.git
+
+
+git remote add origin https://github.com/Trugilho/DesafioAngular
+Retornou:
+error: remote origin already exists.
+
+git remote add origin https://github.com/Trugilho/ DIO-Introducao-Pratica-typescript.git -m  DIO-Introducao-Pratica-typescript
+
+git remote add origin https://github.com/Trugilho/DesafioAngular.git -m DesafioAngular
+
+9 - Efetue o comando abaixo:
+git push -u origin main
+Retornou:
+fatal: 'Repositorio do Projeto Instagram DIO Bootcamp Geração Tech Unimed BH' es not appear to be a git repository
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+
+KKKK Vamo que vamo....
+
+10 - Efetue o comando abaixo:
+git push https://github.com/Trugilho/DIO-Desafio-Instagram.git
+
+git push https://github.com/Trugilho/DIO-Introducao-Pratica-typescript.git
+
+git push https://github.com/Trugilho/Introducao-Pratica-ao-TypeScript.git
+
+git push https://github.com/Trugilho/DesafioAngular.git
+
+a
+Retornou:
+Enumerating objects: 2, done.
+Counting objects: 100% (2/2), done.
+Writing objects: 100% (2/2), 222 bytes | 222.00 KiB/s, done.
+Total 2 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/Trugilho/DIO-Desafio-Instagram.git
+ * [new branch]      main -> main
+
+Viva!!! Agora foi?!?! KKKKK quase....
+
+Houve a inicialização e criação do repositório no GitHub após entrar com a senha do GitHub, mas o repositório deve ser criado SEM nenhum arquivo, através do GitHub consegue-se enviar os arquivos.
+
+
+
+
+
+
+
+
+
+
+
+
